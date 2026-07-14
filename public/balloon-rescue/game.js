@@ -222,9 +222,21 @@ function startRound(){
   const n = 3;
   for(let i=0;i<n;i++) gators.push(createGator(W*(0.2+i*0.3), H*0.86, i%2?1:-1));
   renderWord(); renderKeyboard();
-  const cc = document.getElementById('clue-category'); if(cc) cc.textContent = State.category || 'Random';
+  renderClue();
+  updateHintButton();
   showHUD(true); showPlayUI(true); showMenu(false); hideAllScreens();
   Audio.resume(); if(!Store.data.muted) Audio.startMusic();
+}
+
+function renderClue(){
+  const cc = document.getElementById('clue-text');
+  if(cc) cc.textContent = (window.Clues ? window.Clues.clueFor(State.word, State.category) : (State.category||'Random'));
+}
+function updateHintButton(){
+  const btn = document.getElementById('hint-btn');
+  const cnt = document.getElementById('hint-count');
+  if(cnt) cnt.textContent = State.hintsLeft;
+  if(btn) btn.disabled = State.hintsLeft<=0 || State.scene!=='play';
 }
 
 function newGame(cat){
