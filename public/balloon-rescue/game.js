@@ -776,7 +776,11 @@ document.addEventListener('click', (e)=>{
   else if(act==='how'){ hideAllScreens(); $('#how').classList.remove('hidden'); }
   else if(act==='back'){ hideAllScreens(); $('#menu').classList.remove('hidden'); }
   else if(act==='home'){ hideAllScreens(); showMenu(true); Audio.stopMusic(); }
-  else if(act==='next'){ hideAllScreens(); startRound(); }
+  else if(act==='next'){
+    // Play a 10s rewarded ad before starting the next round.
+    if(window.Ads){ window.Ads.showReward(10, ()=>{ hideAllScreens(); startRound(); }); }
+    else { hideAllScreens(); startRound(); }
+  }
   else if(act==='sound'){ toggleMute(); }
 });
 
