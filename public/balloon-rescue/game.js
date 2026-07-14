@@ -136,6 +136,7 @@ const State = {
   category:'Random',
   word:'', revealed:[], wrong:new Set(), guessed:new Set(),
   lives:5, score:0, solved:0, streak:0,
+  hintsLeft:3,
   emotion:'calm', // calm|happy|scared|panic|celebrate|terrified
   emotionUntil:0,
   shakeUntil:0, shakeAmt:0,
