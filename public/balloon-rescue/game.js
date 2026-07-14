@@ -242,6 +242,7 @@ function updateHintButton(){
 function newGame(cat){
   State.category = cat || State.category || 'Random';
   State.lives = 5; State.score = 0; State.solved = 0; State.streak = 0;
+  State.hintsLeft = 3;
   Store.data.usedByCat[State.category] = [];
   startRound();
 }
