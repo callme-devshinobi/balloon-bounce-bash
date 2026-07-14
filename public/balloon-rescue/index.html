@@ -32,8 +32,12 @@
     <!-- Controls panel (bottom 40%) -->
     <div id="play-ui" class="play-ui hidden">
       <div id="clue" class="clue-card">
-        <span class="clue-label">Category</span>
-        <span class="clue-value" id="clue-category">Random</span>
+        <span class="clue-label">Clue</span>
+        <span class="clue-value" id="clue-text">—</span>
+        <button id="hint-btn" class="hint-btn" aria-label="Reveal a letter" title="Reveal a letter (3 per game)">
+          <span class="bulb">💡</span>
+          <span class="hint-count" id="hint-count">3</span>
+        </button>
       </div>
       <div id="word" class="word" aria-live="polite"></div>
       <div id="keyboard" class="keyboard" role="group" aria-label="Alphabet"></div>
@@ -115,7 +119,25 @@
       </div>
     </div>
   </div>
+
+  <!-- Rewarded 160x300 ad modal -->
+  <div id="reward-modal" class="reward-modal hidden" role="dialog" aria-modal="true" aria-label="Sponsored ad">
+    <div class="reward-card">
+      <div class="reward-head">
+        <span>Sponsored</span>
+        <span id="reward-timer" class="reward-timer">10s</span>
+      </div>
+      <div id="reward-ad-slot" class="reward-slot"></div>
+      <button id="reward-skip" class="btn primary reward-skip" disabled>Please wait 10s</button>
+    </div>
+  </div>
+
+  <!-- Persistent 320x50 bottom banner -->
+  <div id="ad-banner" class="ad-banner" aria-label="Advertisement"></div>
+
   <script src="./words.js"></script>
+  <script src="./clues.js"></script>
+  <script src="./ads.js"></script>
   <script src="./game.js"></script>
 </body>
 </html>

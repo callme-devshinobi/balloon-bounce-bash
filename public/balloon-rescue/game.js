@@ -136,6 +136,7 @@ const State = {
   category:'Random',
   word:'', revealed:[], wrong:new Set(), guessed:new Set(),
   lives:5, score:0, solved:0, streak:0,
+  hintsLeft:3,
   emotion:'calm', // calm|happy|scared|panic|celebrate|terrified
   emotionUntil:0,
   shakeUntil:0, shakeAmt:0,
@@ -221,14 +222,27 @@ function startRound(){
   const n = 3;
   for(let i=0;i<n;i++) gators.push(createGator(W*(0.2+i*0.3), H*0.86, i%2?1:-1));
   renderWord(); renderKeyboard();
-  const cc = document.getElementById('clue-category'); if(cc) cc.textContent = State.category || 'Random';
+  renderClue();
+  updateHintButton();
   showHUD(true); showPlayUI(true); showMenu(false); hideAllScreens();
   Audio.resume(); if(!Store.data.muted) Audio.startMusic();
+}
+
+function renderClue(){
+  const cc = document.getElementById('clue-text');
+  if(cc) cc.textContent = (window.Clues ? window.Clues.clueFor(State.word, State.category) : (State.category||'Random'));
+}
+function updateHintButton(){
+  const btn = document.getElementById('hint-btn');
+  const cnt = document.getElementById('hint-count');
+  if(cnt) cnt.textContent = State.hintsLeft;
+  if(btn) btn.disabled = State.hintsLeft<=0 || State.scene!=='play';
 }
 
 function newGame(cat){
   State.category = cat || State.category || 'Random';
   State.lives = 5; State.score = 0; State.solved = 0; State.streak = 0;
+  State.hintsLeft = 3;
   Store.data.usedByCat[State.category] = [];
   startRound();
 }
@@ -762,7 +776,11 @@ document.addEventListener('click', (e)=>{
   else if(act==='how'){ hideAllScreens(); $('#how').classList.remove('hidden'); }
   else if(act==='back'){ hideAllScreens(); $('#menu').classList.remove('hidden'); }
   else if(act==='home'){ hideAllScreens(); showMenu(true); Audio.stopMusic(); }
-  else if(act==='next'){ hideAllScreens(); startRound(); }
+  else if(act==='next'){
+    // Play a 10s rewarded ad before starting the next round.
+    if(window.Ads){ window.Ads.showReward(10, ()=>{ hideAllScreens(); startRound(); }); }
+    else { hideAllScreens(); startRound(); }
+  }
   else if(act==='sound'){ toggleMute(); }
 });
 
@@ -776,6 +794,42 @@ function toggleMute(){
 $('#btn-sound').addEventListener('click', (e)=>{ e.stopPropagation(); Audio.resume(); toggleMute(); });
 $('#btn-contrast').addEventListener('click', (e)=>{ e.stopPropagation(); Store.data.hc = !Store.data.hc; Store.save(); document.documentElement.classList.toggle('hc', Store.data.hc); });
 $('#btn-home').addEventListener('click', (e)=>{ e.stopPropagation(); hideAllScreens(); showMenu(true); Audio.stopMusic(); });
+
+// Hint button — reveals one random unrevealed letter after watching a 10s rewarded ad. Max 3 per game.
+function useHint(){
+  if(State.scene!=='play' || State.hintsLeft<=0) return;
+  const remaining = [];
+  const w = State.word;
+  for(let i=0;i<w.length;i++){
+    const ch = w[i];
+    if(ch===' ') continue;
+    if(!State.revealed[i]) remaining.push(ch);
+  }
+  if(!remaining.length) return;
+  const letter = choice(remaining);
+  State.hintsLeft--;
+  updateHintButton();
+  // Reveal all occurrences of that letter (like a correct guess, but no score bonus).
+  if(!State.guessed.has(letter)){
+    State.guessed.add(letter);
+    let count=0;
+    for(let i=0;i<w.length;i++) if(w[i]===letter){ State.revealed[i]=letter; count++; }
+    Audio.correct();
+    setEmotion('happy', 700);
+    renderWord(); markKey(letter,true);
+    if(State.revealed.join('')===w){ winRound(); }
+  }
+}
+const hintBtn = document.getElementById('hint-btn');
+if(hintBtn){
+  hintBtn.addEventListener('click', (e)=>{
+    e.stopPropagation();
+    if(State.scene!=='play' || State.hintsLeft<=0) return;
+    Audio.resume(); Audio.click();
+    if(window.Ads){ window.Ads.showReward(10, ()=>useHint()); }
+    else { useHint(); }
+  });
+}
 
 // Keyboard
 window.addEventListener('keydown', (e)=>{
