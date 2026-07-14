@@ -795,6 +795,42 @@ $('#btn-sound').addEventListener('click', (e)=>{ e.stopPropagation(); Audio.resu
 $('#btn-contrast').addEventListener('click', (e)=>{ e.stopPropagation(); Store.data.hc = !Store.data.hc; Store.save(); document.documentElement.classList.toggle('hc', Store.data.hc); });
 $('#btn-home').addEventListener('click', (e)=>{ e.stopPropagation(); hideAllScreens(); showMenu(true); Audio.stopMusic(); });
 
+// Hint button — reveals one random unrevealed letter after watching a 10s rewarded ad. Max 3 per game.
+function useHint(){
+  if(State.scene!=='play' || State.hintsLeft<=0) return;
+  const remaining = [];
+  const w = State.word;
+  for(let i=0;i<w.length;i++){
+    const ch = w[i];
+    if(ch===' ') continue;
+    if(!State.revealed[i]) remaining.push(ch);
+  }
+  if(!remaining.length) return;
+  const letter = choice(remaining);
+  State.hintsLeft--;
+  updateHintButton();
+  // Reveal all occurrences of that letter (like a correct guess, but no score bonus).
+  if(!State.guessed.has(letter)){
+    State.guessed.add(letter);
+    let count=0;
+    for(let i=0;i<w.length;i++) if(w[i]===letter){ State.revealed[i]=letter; count++; }
+    Audio.correct();
+    setEmotion('happy', 700);
+    renderWord(); markKey(letter,true);
+    if(State.revealed.join('')===w){ winRound(); }
+  }
+}
+const hintBtn = document.getElementById('hint-btn');
+if(hintBtn){
+  hintBtn.addEventListener('click', (e)=>{
+    e.stopPropagation();
+    if(State.scene!=='play' || State.hintsLeft<=0) return;
+    Audio.resume(); Audio.click();
+    if(window.Ads){ window.Ads.showReward(10, ()=>useHint()); }
+    else { useHint(); }
+  });
+}
+
 // Keyboard
 window.addEventListener('keydown', (e)=>{
   if(State.scene!=='play') return;
