@@ -25,7 +25,41 @@
 }
 *{box-sizing:border-box}
 html,body{margin:0;height:100%;overflow:hidden;background:linear-gradient(#7ec8ff,#c8ecff);color:var(--ink);font-family:var(--font);-webkit-tap-highlight-color:transparent;user-select:none}
-#app{position:fixed;inset:0;overflow:hidden;display:flex;flex-direction:column}
+#app{position:fixed;top:0;left:0;right:0;bottom:calc(var(--ad-h) + env(safe-area-inset-bottom,0));overflow:hidden;display:flex;flex-direction:column}
+
+/* Bottom banner ad slot */
+.ad-banner{
+  position:fixed;left:0;right:0;bottom:0;
+  height:calc(var(--ad-h) + env(safe-area-inset-bottom,0));
+  padding-bottom:env(safe-area-inset-bottom,0);
+  display:flex;align-items:center;justify-content:center;
+  background:#0e2a3d;
+  z-index:20;
+  overflow:hidden;
+}
+.ad-banner iframe{max-width:100%;}
+
+/* Rewarded ad modal */
+.reward-modal{position:fixed;inset:0;z-index:100;background:rgba(6,20,40,.78);display:flex;align-items:center;justify-content:center;padding:16px;animation:fade .2s ease}
+.reward-card{background:#fff;border-radius:20px;box-shadow:var(--shadow);padding:16px;max-width:320px;width:100%;display:flex;flex-direction:column;align-items:center;gap:12px}
+.reward-head{display:flex;justify-content:space-between;align-items:center;width:100%;font-size:12px;font-weight:700;color:#789;text-transform:uppercase;letter-spacing:.5px}
+.reward-timer{color:var(--primary);font-size:14px}
+.reward-slot{width:160px;height:300px;background:#f2f5f9;border-radius:10px;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.reward-slot iframe{border:0;display:block}
+.reward-skip{width:100%}
+.reward-skip[disabled]{opacity:.6;cursor:not-allowed}
+
+/* Hint bulb button */
+.hint-btn{
+  position:relative;background:linear-gradient(180deg,#fff2a8,#ffd23f);
+  border:0;border-radius:999px;padding:4px 10px 4px 8px;cursor:pointer;
+  display:inline-flex;align-items:center;gap:4px;font-weight:800;font-size:12px;color:#7a4a00;
+  box-shadow:0 2px 0 #c48a00,0 3px 8px rgba(6,30,60,.15);
+}
+.hint-btn:active{transform:translateY(1px);box-shadow:0 1px 0 #c48a00}
+.hint-btn[disabled]{opacity:.45;cursor:not-allowed;filter:grayscale(.4)}
+.hint-btn .bulb{font-size:14px;line-height:1}
+.hint-btn .hint-count{background:#fff;color:var(--primary);border-radius:999px;padding:0 6px;font-size:11px;font-weight:800;min-width:16px;text-align:center}
 
 /* Animation stage: top 60% */
 #stage-wrap{
