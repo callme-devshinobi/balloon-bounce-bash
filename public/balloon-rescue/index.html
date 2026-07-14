@@ -8,26 +8,33 @@
 </head>
 <body>
   <div id="app">
-    <canvas id="stage"></canvas>
-
-    <!-- HUD -->
+    <!-- Top HUD (compact pills) -->
     <div id="hud" class="hud hidden">
       <div class="hud-left">
         <div class="chip">Score <b id="hud-score">0</b></div>
+        <div class="chip lives">Lives <b id="hud-lives">5</b></div>
         <div class="chip">Solved <b id="hud-solved">0</b></div>
         <div class="chip">Streak <b id="hud-streak">0</b></div>
         <div class="chip">Best <b id="hud-best">0</b></div>
       </div>
       <div class="hud-right">
-        <div class="chip lives">Lives <b id="hud-lives">5</b></div>
         <button class="icon-btn" id="btn-sound" aria-label="Toggle sound">🔊</button>
         <button class="icon-btn" id="btn-contrast" aria-label="Toggle high contrast">◐</button>
         <button class="icon-btn" id="btn-home" aria-label="Back to menu">🏠</button>
       </div>
     </div>
 
-    <!-- Word + keyboard -->
+    <!-- Animation stage (top 60%) -->
+    <div id="stage-wrap">
+      <canvas id="stage"></canvas>
+    </div>
+
+    <!-- Controls panel (bottom 40%) -->
     <div id="play-ui" class="play-ui hidden">
+      <div id="clue" class="clue-card">
+        <span class="clue-label">Category</span>
+        <span class="clue-value" id="clue-category">Random</span>
+      </div>
       <div id="word" class="word" aria-live="polite"></div>
       <div id="keyboard" class="keyboard" role="group" aria-label="Alphabet"></div>
     </div>
@@ -48,7 +55,6 @@
       </div>
     </div>
 
-    <!-- Category picker -->
     <div id="categories" class="screen hidden">
       <div class="panel">
         <h2>Pick a Category</h2>
@@ -57,7 +63,6 @@
       </div>
     </div>
 
-    <!-- Scores -->
     <div id="scores" class="screen hidden">
       <div class="panel">
         <h2>High Scores</h2>
@@ -66,7 +71,6 @@
       </div>
     </div>
 
-    <!-- How to play -->
     <div id="how" class="screen hidden">
       <div class="panel">
         <h2>How to Play</h2>
@@ -80,7 +84,6 @@
       </div>
     </div>
 
-    <!-- Round overlay -->
     <div id="round" class="screen hidden">
       <div class="panel small">
         <h2 id="round-title">You Win!</h2>
@@ -96,7 +99,6 @@
       </div>
     </div>
 
-    <!-- Game over -->
     <div id="over" class="screen hidden">
       <div class="panel small">
         <h2>Game Over</h2>

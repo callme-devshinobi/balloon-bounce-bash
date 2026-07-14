@@ -221,6 +221,7 @@ function startRound(){
   const n = 3;
   for(let i=0;i<n;i++) gators.push(createGator(W*(0.2+i*0.3), H*0.86, i%2?1:-1));
   renderWord(); renderKeyboard();
+  const cc = document.getElementById('clue-category'); if(cc) cc.textContent = State.category || 'Random';
   showHUD(true); showPlayUI(true); showMenu(false); hideAllScreens();
   Audio.resume(); if(!Store.data.muted) Audio.startMusic();
 }

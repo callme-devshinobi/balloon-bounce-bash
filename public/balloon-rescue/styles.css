@@ -9,8 +9,14 @@
   --good:#26c281;
   --bad:#ef4444;
   --shadow:0 10px 30px rgba(6,30,60,.18);
+  --panel-shadow:0 -8px 24px rgba(6,30,60,.15);
   --radius:18px;
   --font: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji", sans-serif;
+
+  /* Layout split */
+  --hud-h: 52px;
+  --stage-h: 60vh;
+  --panel-h: 40vh;
 }
 .hc{
   --bg1:#000; --bg2:#111; --ink:#fff; --card:#000; --card2:#111;
@@ -18,35 +24,113 @@
 }
 *{box-sizing:border-box}
 html,body{margin:0;height:100%;overflow:hidden;background:linear-gradient(#7ec8ff,#c8ecff);color:var(--ink);font-family:var(--font);-webkit-tap-highlight-color:transparent;user-select:none}
-#app{position:fixed;inset:0;overflow:hidden}
+#app{position:fixed;inset:0;overflow:hidden;display:flex;flex-direction:column}
+
+/* Animation stage: top 60% */
+#stage-wrap{
+  position:relative;
+  flex:0 0 var(--stage-h);
+  height:var(--stage-h);
+  width:100%;
+  overflow:hidden;
+}
 #stage{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:manipulation}
 .hidden{display:none !important}
 
-/* HUD */
-.hud{position:absolute;top:env(safe-area-inset-top,0);left:0;right:0;display:flex;justify-content:space-between;padding:10px 12px;gap:8px;pointer-events:none;z-index:5;flex-wrap:wrap}
-.hud-left,.hud-right{display:flex;gap:6px;flex-wrap:wrap;pointer-events:auto}
-.chip{background:rgba(255,255,255,.85);backdrop-filter:blur(6px);color:var(--ink);padding:6px 10px;border-radius:999px;font-size:12px;font-weight:600;box-shadow:var(--shadow);white-space:nowrap}
-.chip b{margin-left:4px;color:var(--primary);font-weight:800}
+/* HUD — compact top bar, absolute over the stage */
+.hud{
+  position:absolute;top:env(safe-area-inset-top,0);left:0;right:0;
+  display:flex;justify-content:space-between;align-items:center;
+  padding:8px 10px;gap:8px;pointer-events:none;z-index:5;
+  min-height:var(--hud-h);
+}
+.hud-left{display:flex;gap:5px;flex-wrap:wrap;pointer-events:auto;flex:1;min-width:0}
+.hud-right{display:flex;gap:5px;pointer-events:auto;flex-shrink:0}
+.chip{background:rgba(255,255,255,.9);backdrop-filter:blur(6px);color:var(--ink);padding:5px 9px;border-radius:999px;font-size:11px;font-weight:600;box-shadow:var(--shadow);white-space:nowrap;line-height:1.2}
+.chip b{margin-left:3px;color:var(--primary);font-weight:800}
 .chip.lives b{color:var(--bad)}
-.icon-btn{background:rgba(255,255,255,.9);border:0;width:36px;height:36px;border-radius:50%;box-shadow:var(--shadow);cursor:pointer;font-size:16px}
+.icon-btn{background:rgba(255,255,255,.95);border:0;width:34px;height:34px;border-radius:50%;box-shadow:var(--shadow);cursor:pointer;font-size:15px;display:grid;place-items:center}
 .icon-btn:active{transform:scale(.94)}
 
-/* Play UI */
-.play-ui{position:absolute;left:0;right:0;bottom:0;padding:8px 10px calc(10px + env(safe-area-inset-bottom,0));z-index:4;display:flex;flex-direction:column;align-items:center;gap:8px;pointer-events:none}
-.word{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 8px;font-family:"Courier New",monospace;font-weight:800;font-size:clamp(22px,5vw,34px);letter-spacing:2px;background:rgba(255,255,255,.85);padding:10px 14px;border-radius:14px;box-shadow:var(--shadow);max-width:96vw;color:var(--ink)}
+/* Play UI panel: bottom 40% */
+.play-ui{
+  position:relative;
+  flex:0 0 var(--panel-h);
+  height:var(--panel-h);
+  background:linear-gradient(180deg,#ffffff 0%,#f2f8ff 100%);
+  border-radius:24px 24px 0 0;
+  box-shadow:var(--panel-shadow);
+  padding:10px 10px calc(10px + env(safe-area-inset-bottom,0));
+  z-index:4;
+  display:flex;flex-direction:column;align-items:stretch;gap:8px;
+  pointer-events:auto;
+  overflow:hidden;
+}
+
+/* Clue card */
+.clue-card{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  background:linear-gradient(90deg,#fff3f6,#eaf4ff);
+  border-radius:999px;
+  padding:6px 14px;
+  box-shadow:0 2px 6px rgba(6,30,60,.08);
+  font-size:12px;
+  align-self:center;
+  max-width:96%;
+}
+.clue-label{color:#789;font-weight:600;text-transform:uppercase;letter-spacing:.5px;font-size:10px}
+.clue-value{color:var(--primary);font-weight:800;font-size:13px}
+
+/* Word display */
+.word{
+  display:flex;flex-wrap:wrap;justify-content:center;align-items:center;
+  gap:4px 10px;
+  font-family:"Courier New",monospace;font-weight:800;
+  font-size:clamp(20px,4.8vw,32px);letter-spacing:2px;
+  color:var(--ink);
+  padding:2px 6px;
+  min-height:44px;
+  flex:0 0 auto;
+}
 .word .ltr{min-width:.7em;text-align:center;border-bottom:3px solid var(--ink);padding:0 2px}
 .word .ltr.rev{border-bottom-color:transparent;color:var(--primary);animation:pop .35s ease}
 .word .sp{width:.6em;border:0}
 @keyframes pop{0%{transform:scale(.4);opacity:0}60%{transform:scale(1.25)}100%{transform:scale(1);opacity:1}}
 
-.keyboard{pointer-events:auto;display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:4px;width:min(760px,98vw)}
-.key{background:#fff;border:0;border-radius:10px;padding:0;aspect-ratio:1/1.15;font-weight:800;font-size:clamp(13px,2.4vw,18px);color:var(--ink);box-shadow:0 3px 0 #cfd8e3, 0 6px 12px rgba(6,30,60,.15);cursor:pointer;transition:transform .08s}
+/* Keyboard anchored to bottom */
+.keyboard{
+  margin-top:auto;
+  display:grid;
+  grid-template-columns:repeat(10,minmax(0,1fr));
+  gap:5px;
+  width:100%;
+  max-width:760px;
+  align-self:center;
+}
+.key{
+  background:#fff;border:0;border-radius:10px;padding:0;
+  min-height:44px;height:100%;
+  font-weight:800;font-size:clamp(14px,2.6vw,18px);color:var(--ink);
+  box-shadow:0 3px 0 #cfd8e3, 0 4px 10px rgba(6,30,60,.12);
+  cursor:pointer;transition:transform .08s, background .15s;
+}
 .key:active{transform:translateY(2px);box-shadow:0 1px 0 #cfd8e3}
 .key.good{background:linear-gradient(#a3f0c8,#5fd39a);color:#0a3d24;box-shadow:0 3px 0 #2fa270}
 .key.bad{background:linear-gradient(#ffb1b1,#ff7676);color:#4b0f0f;box-shadow:0 3px 0 #b93a3a}
-.key[disabled]{opacity:.7;cursor:not-allowed}
-@media (max-width:520px){
-  .keyboard{grid-template-columns:repeat(7,minmax(0,1fr))}
+.key[disabled]{opacity:.55;cursor:not-allowed}
+
+/* QWERTY layout on narrower screens */
+@media (max-width:640px){
+  .keyboard{
+    grid-template-columns:repeat(10,minmax(0,1fr));
+    gap:4px;
+  }
+  .key{min-height:40px;font-size:15px;border-radius:8px}
+}
+@media (max-height:640px){
+  :root{ --stage-h:58vh; --panel-h:42vh; }
+  .key{min-height:36px}
+  .word{font-size:22px;min-height:36px}
 }
 
 /* Screens / modals */
