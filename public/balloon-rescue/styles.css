@@ -17,6 +17,7 @@
   --hud-h: 52px;
   --stage-h: 60vh;
   --panel-h: 40vh;
+  --ad-h: 50px;
 }
 .hc{
   --bg1:#000; --bg2:#111; --ink:#fff; --card:#000; --card2:#111;
