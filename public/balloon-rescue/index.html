@@ -32,8 +32,12 @@
     <!-- Controls panel (bottom 40%) -->
     <div id="play-ui" class="play-ui hidden">
       <div id="clue" class="clue-card">
-        <span class="clue-label">Category</span>
-        <span class="clue-value" id="clue-category">Random</span>
+        <span class="clue-label">Clue</span>
+        <span class="clue-value" id="clue-text">—</span>
+        <button id="hint-btn" class="hint-btn" aria-label="Reveal a letter" title="Reveal a letter (3 per game)">
+          <span class="bulb">💡</span>
+          <span class="hint-count" id="hint-count">3</span>
+        </button>
       </div>
       <div id="word" class="word" aria-live="polite"></div>
       <div id="keyboard" class="keyboard" role="group" aria-label="Alphabet"></div>
