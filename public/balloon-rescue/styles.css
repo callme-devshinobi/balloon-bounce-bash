@@ -61,11 +61,11 @@ html,body{margin:0;height:100%;overflow:hidden;background:linear-gradient(#7ec8f
 .hint-btn .bulb{font-size:14px;line-height:1}
 .hint-btn .hint-count{background:#fff;color:var(--primary);border-radius:999px;padding:0 6px;font-size:11px;font-weight:800;min-width:16px;text-align:center}
 
-/* Animation stage: top 60% */
+/* Animation stage: fills remaining space above the panel */
 #stage-wrap{
   position:relative;
-  flex:0 0 var(--stage-h);
-  height:var(--stage-h);
+  flex:1 1 0;
+  min-height:0;
   width:100%;
   overflow:hidden;
 }
@@ -87,19 +87,17 @@ html,body{margin:0;height:100%;overflow:hidden;background:linear-gradient(#7ec8f
 .icon-btn{background:rgba(255,255,255,.95);border:0;width:34px;height:34px;border-radius:50%;box-shadow:var(--shadow);cursor:pointer;font-size:15px;display:grid;place-items:center}
 .icon-btn:active{transform:scale(.94)}
 
-/* Play UI panel: bottom 40% */
+/* Play UI panel: sized to its content so keyboard is always fully visible */
 .play-ui{
   position:relative;
-  flex:0 0 var(--panel-h);
-  height:var(--panel-h);
+  flex:0 0 auto;
   background:linear-gradient(180deg,#ffffff 0%,#f2f8ff 100%);
   border-radius:24px 24px 0 0;
   box-shadow:var(--panel-shadow);
-  padding:10px 10px calc(10px + env(safe-area-inset-bottom,0));
+  padding:8px 8px calc(8px + env(safe-area-inset-bottom,0));
   z-index:4;
-  display:flex;flex-direction:column;align-items:stretch;gap:8px;
+  display:flex;flex-direction:column;align-items:stretch;gap:6px;
   pointer-events:auto;
-  overflow:hidden;
 }
 
 /* Clue card */
@@ -161,11 +159,10 @@ html,body{margin:0;height:100%;overflow:hidden;background:linear-gradient(#7ec8f
     grid-template-columns:repeat(10,minmax(0,1fr));
     gap:4px;
   }
-  .key{min-height:40px;font-size:15px;border-radius:8px}
+  .key{min-height:38px;font-size:15px;border-radius:8px}
 }
-@media (max-height:640px){
-  :root{ --stage-h:58vh; --panel-h:42vh; }
-  .key{min-height:36px}
+@media (max-height:700px){
+  .key{min-height:34px;font-size:14px}
   .word{font-size:22px;min-height:36px}
 }
 
