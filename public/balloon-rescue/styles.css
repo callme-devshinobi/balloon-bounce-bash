@@ -38,6 +38,14 @@ html,body{margin:0;height:100%;overflow:hidden;background:linear-gradient(#7ec8f
   overflow:hidden;
 }
 .ad-banner iframe{max-width:100%;}
+.ad-unit{position:relative;display:grid;place-items:center;max-width:100%;overflow:hidden;background:rgba(255,255,255,.08);border-radius:8px}
+.ad-unit iframe{grid-area:1/1;position:relative;z-index:1}
+.ad-fallback{grid-area:1/1;position:absolute;inset:0;z-index:2;display:flex;align-items:center;justify-content:center;gap:8px;text-align:center;font-weight:800;font-size:12px;line-height:1.2;padding:6px;border:1px dashed rgba(255,255,255,.45);pointer-events:none}
+.ad-loading,.ad-retrying{background:linear-gradient(135deg,rgba(255,255,255,.22),rgba(255,255,255,.08));color:#fff}
+.ad-error{background:#fff0f0;color:#a11919;border-color:#ffb8b8}
+.ad-loaded{opacity:0;background:transparent;border:0;color:transparent}
+.ad-spinner{width:14px;height:14px;border-radius:50%;border:2px solid currentColor;border-right-color:transparent;display:inline-block;animation:spin .8s linear infinite;flex:0 0 auto}
+@keyframes spin{to{transform:rotate(360deg)}}
 
 /* Rewarded ad modal */
 .reward-modal{position:fixed;inset:0;z-index:100;background:rgba(6,20,40,.78);display:flex;align-items:center;justify-content:center;padding:16px;animation:fade .2s ease}
@@ -46,6 +54,9 @@ html,body{margin:0;height:100%;overflow:hidden;background:linear-gradient(#7ec8f
 .reward-timer{color:var(--primary);font-size:14px}
 .reward-slot{width:160px;height:300px;background:#f2f5f9;border-radius:10px;display:flex;align-items:center;justify-content:center;overflow:hidden}
 .reward-slot iframe{border:0;display:block}
+.reward-slot .ad-unit{border-radius:10px;background:#eaf0f7}
+.reward-slot .ad-fallback{border-color:#c9d6e5;color:#48627c}
+.reward-slot .ad-loading,.reward-slot .ad-retrying{background:linear-gradient(135deg,#f9fcff,#e4edf8);color:#48627c}
 .reward-skip{width:100%}
 .reward-skip[disabled]{opacity:.6;cursor:not-allowed}
 
