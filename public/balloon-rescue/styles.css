@@ -159,11 +159,10 @@ html,body{margin:0;height:100%;overflow:hidden;background:linear-gradient(#7ec8f
     grid-template-columns:repeat(10,minmax(0,1fr));
     gap:4px;
   }
-  .key{min-height:40px;font-size:15px;border-radius:8px}
+  .key{min-height:38px;font-size:15px;border-radius:8px}
 }
-@media (max-height:640px){
-  :root{ --stage-h:58vh; --panel-h:42vh; }
-  .key{min-height:36px}
+@media (max-height:700px){
+  .key{min-height:34px;font-size:14px}
   .word{font-size:22px;min-height:36px}
 }
 
